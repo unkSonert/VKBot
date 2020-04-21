@@ -4,7 +4,7 @@ project ("Test-Boost")
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(${PROJECT_NAME} "main.cpp")
+add_executable(${PROJECT_NAME} "echo_server.cpp")
 
 if (MSVC)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++latest /await")

@@ -32,4 +32,6 @@
 *.app
 
 libs_build
+out
+.vs
 
