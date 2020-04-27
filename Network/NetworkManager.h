@@ -14,8 +14,8 @@ namespace Network
 
         explicit NetworkManager(size_t numThreads) noexcept;
 
-        void request(boost::string_view host, http::verb method, boost::string_view target, const RequestParams &params,
-                     const Handler &handler) noexcept;
+        void request(const boost::string_view host, const http::verb method, const boost::string_view target,
+                const RequestParams &params, const Handler &handler) noexcept;
 
     private:
         net::io_context ioc;
