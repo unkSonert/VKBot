@@ -31,7 +31,7 @@ BOOST_FORCEINLINE void Network::HttpSessionImpl::asyncRequest(const http::verb m
     resolver.async_resolve({host.data(), host.size()}, "443",
             [this](const boost::system::error_code ec, const tcp::resolver::results_type& results)
     {
-        if(ec)
+        if (ec)
         {
             call_handler(ec, "resolve");
 
@@ -43,7 +43,7 @@ BOOST_FORCEINLINE void Network::HttpSessionImpl::asyncRequest(const http::verb m
         beast::get_lowest_layer(stream).async_connect(results,
                 [this](beast::error_code ec, const tcp::resolver::results_type::endpoint_type&)
         {
-            if(ec)
+            if (ec)
             {
                 call_handler(ec, "connect");
 
@@ -52,7 +52,7 @@ BOOST_FORCEINLINE void Network::HttpSessionImpl::asyncRequest(const http::verb m
 
             stream.async_handshake(ssl::stream_base::client, [this](beast::error_code ec)
             {
-                if(ec)
+                if (ec)
                 {
                     call_handler(ec, "handshake");
 
@@ -63,7 +63,7 @@ BOOST_FORCEINLINE void Network::HttpSessionImpl::asyncRequest(const http::verb m
 
                 http::async_write(stream, request, [this](beast::error_code ec, std::size_t bytes_transferred)
                 {
-                    if(ec)
+                    if (ec)
                     {
                         call_handler(ec, "write");
 
@@ -73,29 +73,7 @@ BOOST_FORCEINLINE void Network::HttpSessionImpl::asyncRequest(const http::verb m
                     http::async_read(stream, buffer, response,
                             [this](beast::error_code ec, std::size_t bytes_transferred)
                     {
-                        if(ec)
-                        {
-                            call_handler(ec, "read");
-
-                            return;
-                        }
-
-                        stream.async_shutdown([this](beast::error_code ec)
-                        {
-                            if(ec == net::error::eof)
-                            {
-                                ec = {};
-                            }
-
-                            if(ec)
-                            {
-                                call_handler(ec, "shutdown");
-
-                                return;
-                            }
-
-                            call_handler(ec, "");
-                        });
+                        call_handler(ec, ec ? "read" : "");
                     });
                 });
             });
@@ -107,11 +85,11 @@ void Network::HttpSessionImpl::closeSocket()
 {
     stream.async_shutdown([this](beast::error_code ec)
     {
-        if(ec == net::error::eof)
+        if (ec == net::error::eof)
         {
             ec = {};
         }
 
-        handler({ (ec), (ec ? "shutdown" : "") }, std::move(response), std::string());
+        handler({ ec, ec ? "shutdown" : "" }, std::move(response), std::string());
     });
 }
