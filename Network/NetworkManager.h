@@ -15,7 +15,9 @@ namespace Network
         explicit NetworkManager(size_t numThreads) noexcept;
 
         void request(boost::string_view host, http::verb method, boost::string_view target,
-                const RequestParams &params, const Handler &handler) noexcept;
+                const RequestParams &params, Handler &&handler) noexcept;
+
+        ~NetworkManager() noexcept;
 
     private:
         net::io_context ioc;
@@ -27,7 +29,5 @@ namespace Network
         std::vector<std::thread> threads;
 
         void run() noexcept;
-
-        ~NetworkManager() noexcept;
     };
 }

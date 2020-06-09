@@ -4,7 +4,7 @@ project ("VKBot")
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(${PROJECT_NAME} main.cpp Network/NetworkManager.cpp Network/HttpSession.cpp)
+add_executable(${PROJECT_NAME} main.cpp Network/NetworkManager.cpp Network/HttpSession.cpp Utils/Uri.cpp Utils/Uri.h)
 
 set(BOOST_COMPONENTS beast)
 set(BOOST_VERSION 1.71.0)
@@ -16,9 +16,9 @@ if (MSVC)
 	set(OPENSSL_USE_STATIC_LIBS TRUE)
 
 	find_package(Boost ${BOOST_VERSION} COMPONENTS ${BOOST_COMPONENTS} PATHS C:/Boost/lib/cmake/Boost-1.71.0)
+elseif (UNIX)
+	find_package(Boost ${BOOST_VERSION} COMPONENTS ${BOOST_COMPONENTS})
 endif ()
-
-find_package(Boost ${BOOST_VERSION} COMPONENTS ${BOOST_COMPONENTS})
 
 find_package(OpenSSL)
 

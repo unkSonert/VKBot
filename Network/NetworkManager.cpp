@@ -13,6 +13,8 @@ Network::NetworkManager::NetworkManager(const size_t numThreads) noexcept
 
     ctx.set_verify_mode(ssl::verify_peer);
 
+    ctx.set_default_verify_paths();
+
     threads.reserve(numThreads);
 
     for (size_t i = 0; i < numThreads; ++i)
@@ -22,11 +24,11 @@ Network::NetworkManager::NetworkManager(const size_t numThreads) noexcept
 }
 
 void Network::NetworkManager::request(const boost::string_view host, const http::verb method,
-        const boost::string_view target, const RequestParams &params, const Handler &handler) noexcept
+        const boost::string_view target, const RequestParams &params, Handler &&handler) noexcept
 {
     // TODO: URL
 
-    HttpSession session(ioc, ctx, handler);
+    HttpSession session(ioc, ctx, std::move(handler));
 
     session.asyncRequest(method, host, target);
 }

@@ -1,8 +1,10 @@
 #include "HttpSession.h"
+
+#include <utility>
 #include "HttpSessionImpl.h"
 
-Network::HttpSession::HttpSession(net::io_context &ioc, ssl::context &ctx, Handler handler) noexcept
-        : impl(new HttpSessionImpl(ioc, ctx, handler))
+Network::HttpSession::HttpSession(net::io_context &ioc, ssl::context &ctx, Handler &&handler) noexcept
+        : impl(new HttpSessionImpl(ioc, ctx, std::move(handler)))
 {}
 
 void Network::HttpSession::asyncRequest(const http::verb method, const boost::string_view host,
@@ -10,7 +12,7 @@ void Network::HttpSession::asyncRequest(const http::verb method, const boost::st
 { impl->asyncRequest(method, host, target); }
 
 BOOST_FORCEINLINE Network::HttpSessionImpl::HttpSessionImpl(net::io_context &ioc, ssl::context &ctx,
-        Handler handler) noexcept
+        Handler &&handler) noexcept
         : resolver(net::make_strand(ioc)), stream(net::make_strand(ioc), ctx), handler(std::move(handler))
 {}
 
@@ -90,6 +92,11 @@ void Network::HttpSessionImpl::closeSocket()
             ec = {};
         }
 
-        handler({ ec, ec ? "shutdown" : "" }, std::move(response), std::string());
+        if (ec)
+        {
+            handler({ ec, ("shutdown") }, std::move(response), std::string());
+        }
+
+        delete this;
     });
 }

@@ -17,10 +17,9 @@ namespace Network
     class HttpSession
     {
     public:
-        HttpSession(net::io_context &ioc, ssl::context &ctx, Handler handler) noexcept;
+        HttpSession(net::io_context &ioc, ssl::context &ctx, Handler &&handler) noexcept;
 
-        void asyncRequest(const http::verb method, const boost::string_view host,
-                const boost::string_view target) noexcept;
+        void asyncRequest(http::verb method, boost::string_view host, boost::string_view target) noexcept;
 
     private:
         HttpSessionImpl *impl;

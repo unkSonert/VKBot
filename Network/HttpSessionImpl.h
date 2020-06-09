@@ -18,17 +18,15 @@ namespace Network
 
         Handler handler;
 
-        HttpSessionImpl(net::io_context &ioc, ssl::context &ctx, Handler handler) noexcept;
+        HttpSessionImpl(net::io_context &ioc, ssl::context &ctx, Handler &&handler) noexcept;
 
-        void asyncRequest(const http::verb method, const boost::string_view host, const boost::string_view target) noexcept;
+        void asyncRequest(http::verb method, boost::string_view host, boost::string_view target) noexcept;
 
         inline void call_handler(const boost::system::error_code ec, const boost::string_view stepName)
         {
-            handler({ ec, stepName}, std::move(response), beast::buffers_to_string(buffer.data()));
+            handler({ ec, stepName }, std::move(response), std::move(response.body()));
 
             closeSocket();
-
-            delete this;
         }
 
         void closeSocket();
