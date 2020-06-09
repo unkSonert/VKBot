@@ -47,3 +47,13 @@ void Network::NetworkManager::run() noexcept
         }
     }
 }
+
+Network::NetworkManager::~NetworkManager() noexcept
+{
+    ioc.stop();
+
+    for (auto &thread : threads)
+    {
+        thread.join();
+    }
+}
