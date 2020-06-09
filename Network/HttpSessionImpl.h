@@ -20,9 +20,9 @@ namespace Network
 
         HttpSessionImpl(net::io_context &ioc, ssl::context &ctx, Handler &&handler) noexcept;
 
-        void asyncRequest(http::verb method, boost::string_view host, boost::string_view target) noexcept;
+        void asyncRequest(http::verb method, std::string_view host, std::string_view target) noexcept;
 
-        inline void call_handler(const boost::system::error_code ec, const boost::string_view stepName)
+        inline void call_handler(const boost::system::error_code ec, const std::string_view stepName)
         {
             handler({ ec, stepName }, std::move(response), std::move(response.body()));
 

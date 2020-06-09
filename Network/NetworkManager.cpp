@@ -23,14 +23,27 @@ Network::NetworkManager::NetworkManager(const size_t numThreads) noexcept
     }
 }
 
-void Network::NetworkManager::request(const boost::string_view host, const http::verb method,
-        const boost::string_view target, const RequestParams &params, Handler &&handler) noexcept
+void Network::NetworkManager::request(const http::verb method, const network::uri &uri, Handler &&handler) noexcept
 {
-    // TODO: URL
-
     HttpSession session(ioc, ctx, std::move(handler));
 
-    session.asyncRequest(method, host, target);
+    auto authorityView = uri.authority();
+    auto pathView = uri.path();
+    auto queryView = uri.query();
+
+    if (pathView.empty())
+    {
+        pathView = "/";
+    }
+
+    std::string path;
+    path.reserve(pathView.size() + queryView.size() + 1);
+
+    path.append(pathView.data(), pathView.size());
+    path += '?';
+    path.append(queryView.data(), queryView.size());
+
+    session.asyncRequest(method, { authorityView.data(), authorityView.size() }, path);
 }
 
 void Network::NetworkManager::run() noexcept

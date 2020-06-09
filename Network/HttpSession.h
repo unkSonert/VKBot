@@ -7,7 +7,7 @@ namespace Network
     struct ErrorCode
     {
         boost::system::error_code ec;
-        boost::string_view stepName;
+        std::string_view stepName;
     };
 
     using Handler = std::function<void(ErrorCode &&, http::response<http::string_body> &&, std::string &&)>;
@@ -19,7 +19,7 @@ namespace Network
     public:
         HttpSession(net::io_context &ioc, ssl::context &ctx, Handler &&handler) noexcept;
 
-        void asyncRequest(http::verb method, boost::string_view host, boost::string_view target) noexcept;
+        void asyncRequest(http::verb method, std::string_view host, std::string_view target) noexcept;
 
     private:
         HttpSessionImpl *impl;

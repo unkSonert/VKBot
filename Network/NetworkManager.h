@@ -2,6 +2,8 @@
 
 #include <boost/noncopyable.hpp>
 
+#include "network/uri.hpp"
+
 #include "boostNetwork.h"
 #include "HttpSession.h"
 
@@ -14,8 +16,7 @@ namespace Network
 
         explicit NetworkManager(size_t numThreads) noexcept;
 
-        void request(boost::string_view host, http::verb method, boost::string_view target,
-                const RequestParams &params, Handler &&handler) noexcept;
+        void request(const http::verb method, const network::uri &uri, Handler &&handler) noexcept;
 
         ~NetworkManager() noexcept;
 

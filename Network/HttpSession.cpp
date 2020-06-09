@@ -1,14 +1,13 @@
 #include "HttpSession.h"
 
-#include <utility>
 #include "HttpSessionImpl.h"
 
 Network::HttpSession::HttpSession(net::io_context &ioc, ssl::context &ctx, Handler &&handler) noexcept
         : impl(new HttpSessionImpl(ioc, ctx, std::move(handler)))
 {}
 
-void Network::HttpSession::asyncRequest(const http::verb method, const boost::string_view host,
-        const boost::string_view target) noexcept
+void Network::HttpSession::asyncRequest(const http::verb method, const std::string_view host,
+        const std::string_view target) noexcept
 { impl->asyncRequest(method, host, target); }
 
 BOOST_FORCEINLINE Network::HttpSessionImpl::HttpSessionImpl(net::io_context &ioc, ssl::context &ctx,
@@ -16,8 +15,8 @@ BOOST_FORCEINLINE Network::HttpSessionImpl::HttpSessionImpl(net::io_context &ioc
         : resolver(net::make_strand(ioc)), stream(net::make_strand(ioc), ctx), handler(std::move(handler))
 {}
 
-BOOST_FORCEINLINE void Network::HttpSessionImpl::asyncRequest(const http::verb method, const boost::string_view host,
-        const boost::string_view target) noexcept
+BOOST_FORCEINLINE void Network::HttpSessionImpl::asyncRequest(const http::verb method, const std::string_view host,
+        const std::string_view target) noexcept
 {
     if (!SSL_set_tlsext_host_name(stream.native_handle(), host.data()))
     {
