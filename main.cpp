@@ -9,8 +9,7 @@ int main()
     network::uri uri;
     auto builder = network::uri_builder(uri);
 
-    builder/*.path("path")*/ /// fill path, authority, and query if need
-           .authority("ya.ru")/*.append_query_key_value_pair("key", "значение")*/;
+    builder.path("method/users.get").authority("api.vk.com").append_query_key_value_pair("user_ids", "210700286");
 
     bool flag = true;
 

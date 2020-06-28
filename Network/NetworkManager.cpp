@@ -43,7 +43,7 @@ void Network::NetworkManager::request(const http::verb method, const network::ur
     path += '?';
     path.append(queryView.data(), queryView.size());
 
-    session.asyncRequest(method, { authorityView.data(), authorityView.size() }, path);
+    session.asyncRequest(method, std::string { authorityView.data(), authorityView.size() }, path);
 }
 
 void Network::NetworkManager::run() noexcept
