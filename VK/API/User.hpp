@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "../../Dependency/json.hpp"
+#include "nlohmann/json.hpp"
 
 using json = ::nlohmann::json;
 

@@ -4,8 +4,8 @@
 #include <future>
 #include <unordered_map>
 #include <utility>
-#include "../../Dependency/json.hpp"
-#include "../../Network/NetworkManager.h"
+#include "nlohmann/json.hpp"
+#include "Network/NetworkManager.h"
 #include "User.hpp"
 using json = ::nlohmann::json;
 
