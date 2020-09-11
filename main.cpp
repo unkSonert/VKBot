@@ -1,24 +1,10 @@
 #include <iostream>
 
 #include "Network/NetworkManager.h"
+#include "VK/API/VKClient.hpp"
 
 int main()
 {
-    Network::NetworkManager manager(4);
-
-    network::uri uri;
-    auto builder = network::uri_builder(uri);
-
-    builder.path("method/users.get").authority("api.vk.com").append_query_key_value_pair("user_ids", "210700286");
-
-    bool flag = true;
-
-    manager.request(http::verb::get, builder.uri(), [&flag] (auto &&one, auto &&two, auto &&three)
-    {
-        std::cout << three;
-
-        flag = false;
-    });
-
-    while (flag);
+    VK::Client client;
+    std::cout << (client.Authorization("aefbd995219ba3151282696e2b78a842b95822d03a9ef2db98a53bc947373826ff48960e3d0f184d643f2") ? client.GetClientName() : "FUCK");
 }
