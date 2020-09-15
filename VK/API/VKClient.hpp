@@ -4,9 +4,9 @@
 #include <future>
 #include <unordered_map>
 #include <utility>
-#include "../../Dependency/json.hpp"
-#include "../../Network/NetworkManager.h"
-#include "../Objects/VKUser.hpp"
+#include "nlohmann/json.hpp"
+#include "Network/NetworkManager.h"
+#include "User.hpp"
 using json = ::nlohmann::json;
 
 namespace VK
@@ -104,7 +104,7 @@ namespace VK
             return CheckAccess();
         }
 
-        json MethodCall(const std::string &method, const std::unordered_map<std::string, std::string> &params = {})
+        json MethodCall(const std::string &method, const std::unordered_map<std::string, std::string> &params)
         {
             std::promise<json> promise;
             auto future = promise.get_future();

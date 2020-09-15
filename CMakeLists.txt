@@ -5,8 +5,11 @@ project ("VKBot")
 set(CMAKE_CXX_STANDARD 20)
 
 include_directories(uri/include)
+include_directories(json/single_include)
 
 add_subdirectory(uri/src)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 add_compile_definitions(BOOST_BEAST_USE_STD_STRING_VIEW)
 
