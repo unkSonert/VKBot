@@ -29,14 +29,14 @@ namespace VK::Api
 
         std::string GetFullName() { return firstName + " " + lastName; }
 
-        bool operator==(const User &left, const User &right)
+        bool operator==(const User &cmp)
         {
-            return left.uid == right.uid;
+            return uid == cmp.uid;
         }
 
-        bool operator!=(const User &left, const User &right)
+        bool operator!=(const User &cmp)
         {
-            return !(left == right);
+            return !(*this == cmp);
         }
     };
 }

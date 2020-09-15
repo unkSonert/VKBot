@@ -10,7 +10,7 @@ add_subdirectory(uri/src)
 
 add_compile_definitions(BOOST_BEAST_USE_STD_STRING_VIEW)
 
-add_executable(${PROJECT_NAME} main.cpp Network/NetworkManager.cpp Network/HttpSession.cpp VK/API/User.hpp)
+add_executable(${PROJECT_NAME} main.cpp Network/NetworkManager.cpp Network/HttpSession.cpp VK/Objects/VKUser.hpp VK/API/VKLongPoll.hpp)
 
 set(BOOST_COMPONENTS beast)
 set(BOOST_VERSION)
